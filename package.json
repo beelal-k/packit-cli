@@ -1,0 +1,31 @@
+{
+  "name": "packit-cli",
+  "version": "1.0.0",
+  "description": "\"# packit\"",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "beelal-k",
+  "license": "ISC",
+  "bin": {
+    "packit": "index.js"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "figlet": "^1.6.0",
+    "gradient-string": "^2.0.2",
+    "inquirer": "^9.2.10"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beelal-k/packit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beelal-k/packit/issues"
+  },
+  "homepage": "https://github.com/beelal-k/packit#readme"
+}
