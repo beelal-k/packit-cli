@@ -31,7 +31,8 @@ async function selectLibrary() {
             "React",
             "NextJS",
             "Svelte",
-            "Astro"
+            "Astro",
+            "Qwik"
         ],
     })
 
@@ -76,6 +77,9 @@ async function runCmd(library) {
             break;
         case "Astro":
             execSync("npm create astro@latest", { stdio: 'inherit' });
+            break;
+        case "Qwik":
+            execSync("npm create qwik@latest", { stdio: 'inherit' });
             break;
     }
 
