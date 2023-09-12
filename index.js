@@ -21,9 +21,23 @@ try {
     console.log(error);
 }
 
-if (!fs.existsSync('./config.json')) {
-    makeDefault("npm")
+const projects = {
+    "bun": [
+        "Elysia",
+        "React",
+        "NextJS",
+        "Astro",
+        "Svelte"
+    ],
+    "npm": [
+        "React",
+        "NextJS",
+        "Astro",
+        "Svelte",
+        "Qwik"
+    ]
 }
+
 // startup command on running packit
 async function welcome() {
 
@@ -55,7 +69,7 @@ async function selectLibrary() {
         name: "library",
         type: "list",
         message: "Select a framework",
-        choices: config.projects[config.runtime]
+        choices: projects[defaultRuntime]
     })
     if (config.runtime == "npm") {
         runCmdwithNPM(list.library);
