@@ -21,6 +21,9 @@ try {
     console.log(error);
 }
 
+if (!fs.existsSync('./config.json')) {
+    makeDefault("npm")
+}
 // startup command on running packit
 async function welcome() {
 
