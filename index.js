@@ -4,8 +4,24 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import gradient from "gradient-string";
 import figlet from "figlet";
-import { execSync } from "child_process"
+import fs from 'fs';
+import { runCmdwithBun, runCmdwithNPM } from "./runFunctions.js";
 
+
+// Checking the default runtime 
+const configFile = "./config.json";
+let defaultRuntime = 'npm';
+
+let config = {};
+
+try {
+    config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
+    defaultRuntime = config.runtime;
+} catch (error) {
+    console.log(error);
+}
+
+// startup command on running packit
 async function welcome() {
 
     figlet(`\n\npackit`,
@@ -19,9 +35,18 @@ async function welcome() {
         (err, data) => {
             console.log(gradient.pastel.multiline(data));
             console.log(chalk.bold("\nGet started by selecting a framework\n"));
+            console.log(chalk.bold(`Runtime: ${config.runtime} \n`));
         });
 }
 
+// Select default runtime for 
+async function makeDefault(runtime) {
+    config.runtime = runtime;
+    fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
+    console.log(`Successfully made ${runtime} your default runtime!`);
+}
+
+// Select the library to use for the project
 async function selectLibrary() {
     const list = await inquirer.prompt({
         name: "library",
@@ -32,60 +57,42 @@ async function selectLibrary() {
             "NextJS",
             "Svelte",
             "Astro",
-            "Qwik"
+            `${config.runtime != 'bun' ? "Qwik" : "Qwik (Not yet supported in bun)"}`
         ],
     })
-
-    runCmd(list.library);
-}
-
-
-async function runCmd(library) {
-
-    switch (library) {
-        case "React":
-            const reactOption = await inquirer.prompt({
-                name: "react_build",
-                type: "list",
-                message: "Select the build tool you want to use",
-                choices: [
-                    "Create-react-app (CRA)",
-                    "Vite",
-                ],
-
-            })
-
-            if (reactOption.react_build == "Vite") {
-                execSync("npm create vite@latest", { stdio: 'inherit' });
-            }
-            else {
-
-                const project = await inquirer.prompt({
-                    name: "name",
-                    type: "input",
-                    message: "Project name: ",
-
-                })
-                execSync(`npx create-react-app ${project.name}`, { stdio: 'inherit' });
-            }
-            break;
-        case "NextJS":
-            execSync("npx create-next-app@latest", { stdio: 'inherit' });
-            break;
-        case "Svelte":
-            execSync("npm create svelte@latest", { stdio: 'inherit' });
-            break;
-        case "Astro":
-            execSync("npm create astro@latest", { stdio: 'inherit' });
-            break;
-        case "Qwik":
-            execSync("npm create qwik@latest", { stdio: 'inherit' });
-            break;
+    if (config.runtime == "npm") {
+        runCmdwithNPM(list.library);
     }
-
+    else {
+        runCmdwithBun(list.library);
+    }
 }
 
-await welcome();
-setTimeout(() => {
-    selectLibrary();
-}, 1000)
+// flags
+if (process.argv.includes("-help") || process.argv.includes("-h")) {
+    console.log(chalk.bold("\npackit : Run packit-cli"));
+    console.log(chalk.bold("\n-runtime [-r] : Select a default runtime to use for creating projects"));
+}
+else if (process.argv.includes("-r") || process.argv.includes("-runtime")) {
+
+    const runtime = await inquirer.prompt({
+        name: "default",
+        type: "list",
+        message: "Select a default runtime",
+        default: config.runtime || 'npm',
+        choices: [
+            `${defaultRuntime == 'npm' ? 'npm (default)' : 'npm'}`,
+            `${defaultRuntime == 'bun' ? 'bun(default)' : 'bun'}`,
+        ],
+    });
+
+    makeDefault(runtime.default);
+
+}
+else {
+    await welcome();
+    setTimeout(() => {
+        selectLibrary();
+    }, 1000)
+
+}
