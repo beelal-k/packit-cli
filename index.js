@@ -52,13 +52,7 @@ async function selectLibrary() {
         name: "library",
         type: "list",
         message: "Select a framework",
-        choices: [
-            "React",
-            "NextJS",
-            "Svelte",
-            "Astro",
-            `${config.runtime != 'bun' ? "Qwik" : "Qwik (Not yet supported in bun)"}`
-        ],
+        choices: config.projects[config.runtime]
     })
     if (config.runtime == "npm") {
         runCmdwithNPM(list.library);

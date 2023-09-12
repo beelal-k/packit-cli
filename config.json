@@ -1,3 +1,19 @@
 {
-  "runtime": "bun"
+  "runtime": "bun",
+  "projects": {
+    "bun": [
+      "Elysia",
+      "React",
+      "NextJS",
+      "Astro",
+      "Svelte"
+    ],
+    "npm": [
+      "React",
+      "NextJS",
+      "Astro",
+      "Svelte",
+      "Qwik"
+    ]
+  }
 }

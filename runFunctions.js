@@ -92,6 +92,9 @@ export async function runCmdwithBun(library) {
         case "Astro":
             execSync(`bun create astro@latest ${project.name}`, { stdio: 'inherit' });
             break;
+        case "Elysia":
+            execSync(`bun create elysia ${project.name}`, { stdio: 'inherit' });
+            break;
     }
 
 }
