@@ -12,13 +12,17 @@ import { runCmdwithBun, runCmdwithNPM } from "./runFunctions.js";
 const configFile = "./config.json";
 let defaultRuntime = 'npm';
 
+if (!fs.existsSync('./config.json')) {
+    fs.writeFileSync('./config.json', JSON.stringify({ "runtime": "npm" }, null, 2));
+}
+
 let config = {};
 
 try {
     config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
     defaultRuntime = config.runtime;
 } catch (error) {
-    console.log(error);
+    console.log("Error: config.json does not exist");
 }
 
 const projects = {

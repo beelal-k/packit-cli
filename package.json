@@ -19,7 +19,6 @@
     "gradient-string": "^2.0.2",
     "inquirer": "^9.2.10"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beelal-k/packit.git"
